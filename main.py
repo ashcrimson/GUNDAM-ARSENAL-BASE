@@ -14,6 +14,68 @@ CARPETA_CARTAS = "assets/cartas"
 SONIDO_GIRO = pygame.mixer.Sound("assets/sound/flip.mp3")
 FUENTE = "C:/Windows/Fonts/arial.ttf"
 
+# --------------------------------------------------
+# Tipografía Global
+# --------------------------------------------------
+
+TAMAÑO_MENU = 22
+TAMAÑO_SUBMENU = 18
+TAMAÑO_TITULO = 36
+TAMAÑO_PAGINA = 20
+TAMAÑO_INSTRUCCIONES = 18
+
+# --------------------------------------------------
+# Espaciado Global
+# --------------------------------------------------
+
+ANCHO_PANEL = 400
+ANCHO_CONTENIDO = 1200
+
+MARGEN_MENU_X = 20
+MARGEN_TITULO_Y = 30
+
+ANCHO_BOTON_MENU = 360
+ALTO_BOTON_MENU = 42
+
+SEPARACION_MENU = 45
+ANCHO_BOTON_PAGINA = 42
+ALTO_BOTON_PAGINA = 32
+
+# --------------------------------------------------
+# Jerarquía del Panel
+# --------------------------------------------------
+
+PANEL_X = 20
+PANEL_ANCHO = 360
+
+SECCION_ALTO = 42
+SECCION_ESPACIO = 12
+
+SUBMENU_X = 45
+SUBMENU_ALTO = 35
+SUBMENU_ESPACIO = 38
+
+COLOR_SECCION_ACTIVA = (30, 30, 30)
+COLOR_SECCION_TEXTO = (255, 255, 255)
+COLOR_SUBMENU = (30, 30, 30)
+COLOR_DIVISOR = (210, 210, 210)
+
+# --------------------------------------------------
+# Paleta Global
+# --------------------------------------------------
+
+COLOR_FONDO = (235, 235, 235)
+COLOR_PANEL = (255, 255, 255)
+
+COLOR_NEGRO = (30, 30, 30)
+COLOR_BLANCO = (255, 255, 255)
+
+COLOR_SELECCION = (220, 220, 220)
+COLOR_BORDE = (30, 30, 30)
+
+COLOR_OVERLAY = (0, 0, 0, 180)
+COLOR_SOMBRA = (0, 0, 0, 100)
+
 
 # --------------------------------------------------
 # Buscar cartas
@@ -263,7 +325,6 @@ while ejecutando:
                             pagina = 0
 
 
-
                         y_menu += 38
 
 
@@ -313,7 +374,6 @@ while ejecutando:
                             )
 
                             pagina = 0
-
 
 
                         y_menu += 38
@@ -369,7 +429,6 @@ while ejecutando:
                             )
 
                             pagina = 0
-
 
 
                         y_menu += alto_item
@@ -434,11 +493,11 @@ while ejecutando:
                 ancho_carta = 180
                 alto_carta = 252
 
-                espacio_x = 35
-                espacio_y = 35
+                espacio_x = 20
+                espacio_y = 25
 
-                inicio_x = 450
-                inicio_y = 100
+                inicio_x = 420
+                inicio_y = 130
 
                 for i in range(CARTAS_POR_PAGINA):
 
@@ -489,7 +548,7 @@ while ejecutando:
                         animando_entrada = True
                         progreso_entrada = 0
 
-                       
+
 
 
             # ==================================================
@@ -620,7 +679,7 @@ while ejecutando:
     # ==================================================
 
     pantalla.fill(
-        (235, 235, 235)
+        COLOR_FONDO
     )
 
 
@@ -630,23 +689,24 @@ while ejecutando:
 
     pygame.draw.rect(
         pantalla,
-        (245, 245, 245),
-        (0, 0, 400, ALTO)
+        COLOR_PANEL,
+        (0, 0, ANCHO_PANEL, ALTO)
     )
-
 
     pygame.draw.line(
         pantalla,
-        (30, 30, 30),
-        (400, 0),
-        (400, ALTO),
-        2
+        COLOR_DIVISOR,
+        (ANCHO_PANEL, 0),
+        (ANCHO_PANEL, ALTO),
+        1
     )
 
     fuente_menu = pygame.font.Font(
         FUENTE,
-        24
+        TAMAÑO_MENU
     )
+
+    fuente_submenu = pygame.font.Font(FUENTE, TAMAÑO_SUBMENU)
 
     titulo_menu = fuente_menu.render(
         "ARSENAL BASE",
@@ -667,18 +727,33 @@ while ejecutando:
     # SEASONS
     # ------------------------------------------
 
-    pygame.draw.rect(
-        pantalla,
-        (30, 30, 30),
-        (20, y_menu - 5, 360, 42)
-    )
+    if menu_seasons:
 
-    flecha = "▼" if menu_seasons else "▶"
+        pygame.draw.rect(
+            pantalla,
+            COLOR_SECCION_ACTIVA,
+            (
+                PANEL_X,
+                y_menu - 5,
+                PANEL_ANCHO,
+                SECCION_ALTO
+            )
+        )
+
+        flecha = "▼"
+
+        color_seccion = COLOR_SECCION_TEXTO
+
+    else:
+
+        flecha = "▶"
+
+        color_seccion = COLOR_SUBMENU
 
     texto = fuente_menu.render(
         flecha + " SEASONS",
         True,
-        (255, 255, 255)
+        color_seccion
     )
 
     pantalla.blit(
@@ -686,7 +761,7 @@ while ejecutando:
         (30, y_menu)
     )
 
-    y_menu += 45
+    y_menu += SEPARACION_MENU
 
     if menu_seasons:
 
@@ -703,17 +778,17 @@ while ejecutando:
             if codigo == temporada_seleccionada:
                 pygame.draw.rect(
                     pantalla,
-                    (220, 220, 220),
+                    COLOR_SELECCION,
                     (30, y_menu, 450, 35)
                 )
 
                 pygame.draw.rect(
                     pantalla,
-                    (30, 30, 30),
-                    (30, y_menu, 350, 35),
+                    COLOR_BORDE,
+                    (30, y_menu, 450, 35),
                     1
                 )
-            texto = fuente_menu.render(
+            texto = fuente_submenu.render(
                 nombre,
                 True,
                 (30, 30, 30)
@@ -731,12 +806,31 @@ while ejecutando:
     # ARSENAL RARE
     # ------------------------------------------
 
-    flecha = "▼" if menu_rare else "▶"
+    if menu_rare:
+
+        pygame.draw.rect(
+            pantalla,
+            COLOR_SECCION_ACTIVA,
+            (
+                PANEL_X,
+                y_menu - 5,
+                PANEL_ANCHO,
+                SECCION_ALTO
+            )
+        )
+
+        flecha = "▼"
+        color_seccion = COLOR_SECCION_TEXTO
+
+    else:
+
+        flecha = "▶"
+        color_seccion = COLOR_SUBMENU
 
     texto = fuente_menu.render(
         flecha + " ARSENAL RARE",
         True,
-        (30, 30, 30)
+        color_seccion
     )
 
     pantalla.blit(
@@ -756,18 +850,18 @@ while ejecutando:
             if codigo == temporada_seleccionada:
                 pygame.draw.rect(
                     pantalla,
-                    (220, 220, 220),
+                    COLOR_SELECCION,
                     (30, y_menu, 450, 35)
                 )
 
                 pygame.draw.rect(
                     pantalla,
-                    (30, 30, 30),
+                    COLOR_BORDE,
                     (30, y_menu, 450, 35),
                     1
                 )
 
-            texto = fuente_menu.render(
+            texto = fuente_submenu.render(
                 nombre,
                 True,
                 (30, 30, 30)
@@ -785,12 +879,31 @@ while ejecutando:
     # BOOSTER PACK
     # ------------------------------------------
 
-    flecha = "▼" if menu_booster else "▶"
+    if menu_booster:
+
+        pygame.draw.rect(
+            pantalla,
+            COLOR_SECCION_ACTIVA,
+            (
+                PANEL_X,
+                y_menu - 5,
+                PANEL_ANCHO,
+                SECCION_ALTO
+            )
+        )
+
+        flecha = "▼"
+        color_seccion = COLOR_SECCION_TEXTO
+
+    else:
+
+        flecha = "▶"
+        color_seccion = COLOR_SUBMENU
 
     texto = fuente_menu.render(
         flecha + " BOOSTER PACK",
         True,
-        (30, 30, 30)
+        color_seccion
     )
 
     pantalla.blit(
@@ -810,13 +923,13 @@ while ejecutando:
             if codigo == temporada_seleccionada:
                 pygame.draw.rect(
                     pantalla,
-                    (220, 220, 220),
+                    COLOR_SELECCION,
                     (30, y_menu, 450, 35)
                 )
 
                 pygame.draw.rect(
                     pantalla,
-                    (30, 30, 30),
+                    COLOR_BORDE,
                     (30, y_menu, 450, 35),
                     1
                 )
@@ -839,13 +952,13 @@ while ejecutando:
                     else:
                         linea2 += (" " if linea2 else "") + palabra
 
-                texto1 = fuente_menu.render(
+                texto1 = fuente_submenu.render(
                     linea1,
                     True,
                     (30, 30, 30)
                 )
 
-                texto2 = fuente_menu.render(
+                texto2 = fuente_submenu.render(
                     linea2,
                     True,
                     (30, 30, 30)
@@ -865,7 +978,7 @@ while ejecutando:
 
             else:
 
-                texto = fuente_menu.render(
+                texto = fuente_submenu.render(
                     nombre,
                     True,
                     (30, 30, 30)
@@ -883,12 +996,31 @@ while ejecutando:
     # FORSQUAD
     # ------------------------------------------
 
-    flecha = "▼" if menu_forsquad else "▶"
+    if menu_forsquad:
+
+        pygame.draw.rect(
+            pantalla,
+            COLOR_SECCION_ACTIVA,
+            (
+                PANEL_X,
+                y_menu - 5,
+                PANEL_ANCHO,
+                SECCION_ALTO
+            )
+        )
+
+        flecha = "▼"
+        color_seccion = COLOR_SECCION_TEXTO
+
+    else:
+
+        flecha = "▶"
+        color_seccion = COLOR_SUBMENU
 
     texto = fuente_menu.render(
         flecha + " FORSQUAD",
         True,
-        (30, 30, 30)
+        color_seccion
     )
 
     pantalla.blit(
@@ -908,17 +1040,18 @@ while ejecutando:
             if codigo == temporada_seleccionada:
                 pygame.draw.rect(
                     pantalla,
-                    (220, 220, 220),
+                    COLOR_SELECCION,
                     (30, y_menu, 450, 35)
                 )
 
                 pygame.draw.rect(
                     pantalla,
-                    (30, 30, 30),
+                    COLOR_BORDE,
                     (30, y_menu, 450, 35),
                     1
                 )
-            texto = fuente_menu.render(
+
+            texto = fuente_submenu.render(
                 nombre,
                 True,
                 (30, 30, 30)
@@ -936,31 +1069,53 @@ while ejecutando:
     # TÍTULO
     # ==================================================
 
-    fuente = pygame.font.Font(
-        FUENTE,
-        38
-    )
+    fuente = pygame.font.Font(FUENTE, TAMAÑO_TITULO)
 
     titulo = fuente.render(
         "GUNDAM ARSENAL BASE",
         True,
-        (30, 30, 30)
+        COLOR_NEGRO
+    )
+
+    fuente_subtitulo = pygame.font.Font(FUENTE, 14)
+
+    subtitulo = fuente_subtitulo.render(
+        "CARD LIST",
+        True,
+        (120, 120, 120)
     )
 
     pantalla.blit(
         titulo,
         (
-            540 + (ANCHO - 540) // 2
-            - titulo.get_width() // 2,
-            35
+            910 - titulo.get_width() // 2,
+            45
         )
+    )
+
+    pantalla.blit(
+        subtitulo,
+        (
+            910 - subtitulo.get_width() // 2,
+            82
+        )
+    )
+
+
+
+    pygame.draw.line(
+        pantalla,
+        COLOR_DIVISOR,
+        (420, 100),
+        (1400, 100),
+        1
     )
 
     pygame.draw.line(
         pantalla,
         (30, 30, 30),
-        (520, 85),
-        (1560, 85),
+        (520, 105),
+        (1560, 105),
         2
     )
 
@@ -972,11 +1127,24 @@ while ejecutando:
     ancho_carta = 180
     alto_carta = 252
 
-    espacio_x = 45
-    espacio_y = 35
+    espacio_x = 20
+    espacio_y = 25
 
-    inicio_x = 450
-    inicio_y = 100
+    inicio_x = 420
+    inicio_y = 130
+
+    pygame.draw.rect(
+        pantalla,
+        COLOR_BLANCO,
+        (400, 105, 1020, 565)
+    )
+
+    pygame.draw.rect(
+        pantalla,
+        COLOR_DIVISOR,
+        (400, 105, 1020, 565),
+        1
+    )
 
     for i in range(CARTAS_POR_PAGINA):
 
@@ -1007,6 +1175,27 @@ while ejecutando:
             )
         )
 
+        mouse_x, mouse_y = pygame.mouse.get_pos()
+
+        hover = (
+                x <= mouse_x <= x + ancho_carta
+                and
+                y <= mouse_y <= y + alto_carta
+        )
+
+        if hover:
+            y_dibujo = y - 4
+        else:
+            y_dibujo = y
+
+
+
+        pygame.draw.rect(
+            pantalla,
+            COLOR_SOMBRA,
+            (x + 4, y + 4, ancho_carta, alto_carta)
+        )
+
         imagen = cargar_carta(
             cartas_mostradas[indice],
             (
@@ -1017,27 +1206,50 @@ while ejecutando:
 
         pantalla.blit(
             imagen,
-            (x, y)
+            (x, y_dibujo)
         )
+
+        if hover:
+            pygame.draw.rect(
+                pantalla,
+                COLOR_NEGRO,
+                (
+                    x - 2,
+                    y_dibujo - 2,
+                    ancho_carta + 4,
+                    alto_carta + 4
+                ),
+                2
+            )
 
 
     # ==================================================
     # PÁGINA
     # ==================================================
+    pygame.draw.line(
+        pantalla,
+        COLOR_DIVISOR,
+        (520, 680),
+        (1300, 680),
+        1
+    )
+
 
     fuente = pygame.font.Font(
         FUENTE,
-        24
+        TAMAÑO_PAGINA
     )
 
     total_paginas = (
         len(cartas_mostradas) - 1
     ) // CARTAS_POR_PAGINA + 1
 
+
+
     texto_pagina = fuente.render(
         f"Página {pagina + 1} / {total_paginas}",
         True,
-        (30, 30, 30)
+        COLOR_NEGRO
     )
 
     pantalla.blit(
@@ -1045,7 +1257,7 @@ while ejecutando:
         (
             ANCHO // 2
             - texto_pagina.get_width() // 2,
-            670
+            690
         )
     )
 
@@ -1066,7 +1278,7 @@ while ejecutando:
         )
 
         overlay.fill(
-            (0, 0, 0, 180)
+            COLOR_OVERLAY
         )
 
         pantalla.blit(
@@ -1097,7 +1309,7 @@ while ejecutando:
         )
 
         sombra.fill(
-            (0, 0, 0, 100)
+            COLOR_SOMBRA
         )
 
         pantalla.blit(
@@ -1266,7 +1478,7 @@ while ejecutando:
 
         fuente = pygame.font.Font(
             FUENTE,
-            22
+            TAMAÑO_INSTRUCCIONES
         )
 
         texto = fuente.render(
